@@ -12,4 +12,6 @@ langgraph
 tabulate
 pyppeteer
 openpyxl
+os
+sys
 
