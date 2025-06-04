@@ -1,38 +1,47 @@
+import logging
 from config import get_embedding
 from config import get_llm
+from extract_fragment import fragmento_deseado
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_community.vectorstores import FAISS
+from langchain.schema import Document
 
 # Configuración de logging
-logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
+logger = logging.getLogger(__name__)
 
-# Cargar variables de entorno
-load_dotenv()
-OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
-openai.api_key = OPENAI_API_KEY
+# ========================
+# VECTORE STORE
+# ========================
+# chunk - split
+embedding = get_embedding()
+logger.info("Text split + chunl")
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=100, chunk_overlap=20)
+docs = [Document(page_content=fragmento_deseado)]
+all_splits = text_splitter.split_documents(docs)
 
-# --- Generar embedding y almacenar en FAISS ---
-if fragmento_deseado:
-    logging.info("Generando embedding del fragmento extraído...")
-    response = openai.get_embedding(
-        input=fragmento_deseado,
-        model="text-embedding-ada-002"
-    )
-    embedding = np.array(response['data'][0]['embedding'], dtype=np.float32).reshape(1, -1)
-    
-    # Crear índice FAISS y almacenar embedding
-    dim = embedding.shape[1]
-    index = faiss.IndexFlatL2(dim)
-    index.add(embedding)
-    faiss.write_index(index, os.path.join(document_folder, "fragment_embedding.index"))
-    logging.info("Embedding generado y almacenado en FAISS: %s", os.path.join(document_folder, "fragment_embedding.index"))
+# vectore store - embedding
+vectore_store = FAISS.from_documents(all_splits, embedding)  # search FAISS
+retriever = vectore_store.as_retriever()  # converts index into a retriever
+logger.info("vector store cargado")
 
+# ========================
+# FLUJO RAG
+# ========================
+llm = get_llm()
+query = "Utiliza la informacion almacenada en el cotexto para generar una descripcion de producto ideal, que condiciones necesita para obtener una correcta descripcion"
+#Recupera los fragmentos más relevantes usando el retriever
+docs_relevantes = retriever.get_relevant_documents(query)
+#Junta los fragmentos en un solo contexto
+contexto = "\n".join([doc.page_content for doc in docs_relevantes])
+# 4. Prepara el prompt para el LLM
+prompt = f"""Usa el siguiente contexto para responder la pregunta de forma precisa y detallada.
+Contexto:
+{contexto}
+Pregunta: {query}
+Respuesta:"""
 
-start_idx = fragmento.find(start_text)
-end_idx = fragmento.find(end_text)
-
-if start_idx == -1 or end_idx == -1:
-    raise ValueError("No se encontraron los textos delimitadores en el PDF extraído.")
-
-end_idx += len(end_text)
-fragmento_deseado = fragmento[start_idx:end_idx]
-
-logging.info("Fragmento extraído:\n%s", fragmento_deseado)
+#test
+respuesta = llm.invoke(prompt)
+print("Respuesta generada por el LLM:")
+print(respuesta[0])

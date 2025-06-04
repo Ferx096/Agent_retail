@@ -1,5 +1,15 @@
+pandas
+numpy
 pdfplumber
 python-dotenv
 faiss-cpu
 logging
+langchain
 langchain_openai
+langchain_community
+langchain-core
+langgraph
+tabulate
+pyppeteer
+openpyxl
+

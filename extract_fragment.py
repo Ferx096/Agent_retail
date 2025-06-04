@@ -6,6 +6,7 @@ import pdfplumber
 import openai
 import faiss
 import numpy as np
+
 # Configuración de logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -20,7 +21,7 @@ if not os.path.exists(local_pdf):
     response = requests.get(pdf_url)
     with open(local_pdf, "wb") as f:
         f.write(response.content)
-    logging.info("PDF descargado en:", local_pdf)
+    logging.info("PDF descargado en: %s", local_pdf)
     
 
 # 2. Extraer el fragmento entre los textos delimitadores
@@ -28,7 +29,9 @@ start_page = 21  # Página 22 (índice base 0)
 end_page = 28    # Página 29 (índice base 0)
 
 start_text = "A. NEGOCIO DE CONSUMO MASIVO"
-end_text = "Además, logra excelentes resultados de indicadores digitales, como un sentiment positivo del 89% y un VTR (view through rate) del 45% en Youtube."
+end_text = """Además, logra excelentes
+resultados de indicadores digitales, como un sentiment positivo del 89% y un VTR (view-
+through rate) del 45% en Youtube."""
 
 with pdfplumber.open(local_pdf) as pdf:
     fragmento = ""
@@ -38,6 +41,7 @@ with pdfplumber.open(local_pdf) as pdf:
         if page_text:
             fragmento += page_text + "\n"
 
+#Seleccionar texto exclusivo para el embeddings
 start_idx = fragmento.find(start_text)
 end_idx = fragmento.find(end_text)
 
