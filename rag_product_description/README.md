@@ -2,6 +2,10 @@
 
 Este documento describe el flujo de trabajo y la función de cada archivo en la carpeta `rag_product_description` para facilitar el desarrollo y mantenimiento del sistema RAG (Retrieval-Augmented Generation) aplicado a descripciones de productos.
 
+El objetivo de esta carpeta es obtener información veraz, precisa, real y estructurada sobre el formato y los requisitos necesarios para generar descripciones de productos.
+
+*Fuente:*  Memoria anual de alicorp 2023  [📄](https://www.alicorp.com.pe/media/PDF/memoria_anual_2023.pdf)
+
 ---
 ## Estructura de la Carpeta
 
@@ -68,4 +72,4 @@ Tambien añadir cada prompt por subcategoria y clase por ejemplo en `CONSUMO MAS
   
 - Cuidado personal
 
-*FUENTE*: https://www.alicorp.com.pe/pe/es/productos/consumo-masivo 
+*FUENTE*: [🅰️](https://www.alicorp.com.pe/pe/es/productos/consumo-masivo)
