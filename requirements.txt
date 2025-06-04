@@ -1,2 +1,5 @@
 pdfplumber
 openai
+python-dotenv
+faiss-cpu
+logging
