@@ -43,7 +43,9 @@ with pdfplumber.open(local_pdf) as pdf:
         if page_text:
             fragmento += page_text + "\n"
 
-#Seleccionar texto exclusivo para el embeddings
+    logging.info('Texto extraído de las páginas seleccionadas:')
+    print(fragmento)
+
 start_idx = fragmento.find(start_text)
 end_idx = fragmento.find(end_text)
 
