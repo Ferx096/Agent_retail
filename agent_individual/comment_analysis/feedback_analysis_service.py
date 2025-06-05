@@ -39,6 +39,11 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
     logger.info(f"Enviando lote de {len(lote)} comentarios a Azure OpenAI...")
     text = llm.invoke(prompt)
     logger.info(f"Respuesta recibida de Azure OpenAI para lote: {str(text)[:200]}...")
+    # Si la respuesta viene como objeto con content, extraerlo
+    if hasattr(text, 'content'):
+        return {"resumen": str(text.content)}
+    if isinstance(text, dict) and 'content' in text:
+        return {"resumen": str(text['content'])}
     return {"resumen": str(text)}
 
 
