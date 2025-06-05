@@ -72,4 +72,5 @@ Tambien añadir cada prompt por subcategoria y clase por ejemplo en `CONSUMO MAS
   
 - Cuidado personal
 
-*FUENTE*: [🅰️](https://www.alicorp.com.pe/pe/es/productos/consumo-masivo)
+*FUENTE*: [](https://www.alicorp.com.pe/pe/es/productos/consumo-masivo)
+🅰️
