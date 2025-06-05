@@ -15,7 +15,7 @@ from config import HUGGING
 api_token = HUGGING['api']
 
 # 2. Model ID sacado de Hugging Face
-model_id = "prompthero/openjourney"
+model_id = "stabilityai/stable-diffusion-2"
 
 # 3. URL de inferencia
 API_URL = f"https://api-inference.huggingface.co/models/{model_id}"
