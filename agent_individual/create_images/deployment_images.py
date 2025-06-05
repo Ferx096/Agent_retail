@@ -1,6 +1,12 @@
 import streamlit as st
+import logging
+import sys
 import os
 from datetime import datetime
+# Agrega la raíz del proyecto al sys.path
+ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+if ROOT_PATH not in sys.path:
+    sys.path.insert(0, ROOT_PATH)
 from huggingface_hub import InferenceClient
 from config import HUGGING
 
@@ -8,11 +14,11 @@ from config import HUGGING
 st.set_page_config(page_title="Generador de Imágenes", layout="centered")
 
 # Título
-st.title("🖼️ Generador de Imágenes con Hugging Face")
+st.title("🅰️ Generador de Imágenes Promocionales con Hugging Face")
 
 # Campo de texto para el prompt
 prompt = st.text_area(
-    "Describe la imagen que quieres generar:",
+    "Describe la imagen que quieres generar en base a la promocion:",
     value="Un empaque de snacks saludables, diseño moderno y minimalista, colores verde y blanco, fondo blanco con luz natural, frutas frescas, estilo fotográfico profesional"
 )
 
