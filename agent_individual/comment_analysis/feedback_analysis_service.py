@@ -57,6 +57,15 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
                 content = content_match.group(1)
             else:
                 content = text
+            # Intentar doble deserialización si es necesario
+            try:
+                # Primer intento: deserializar como string JSON anidado
+                inner = json.loads(content)
+                if isinstance(inner, str):
+                    return json.loads(inner)
+                return inner
+            except Exception:
+                pass
             # Limpiar escapes comunes
             cleaned = content.replace('\\n', '\n').replace('\\"', '"').replace('\\t', '\t')
             # Buscar el primer bloque JSON
