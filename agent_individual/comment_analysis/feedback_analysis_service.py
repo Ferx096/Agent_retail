@@ -45,14 +45,25 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
     logger.info(f"Enviando lote de {len(lote)} comentarios a Azure OpenAI...")
     text = llm.invoke(prompt)
     logger.info(f"Respuesta recibida de Azure OpenAI para lote: {str(text)[:200]}...")
-    match = re.search(r'\{.*\}', str(text), re.DOTALL)
-    if match:
-        try:
-            return json.loads(match.group())
-        except Exception as e:
-            logger.error(f"Error al parsear JSON: {e}")
+
+    # Intentar parsear directamente si es un dict o string JSON
+    try:
+        if isinstance(text, dict):
+            return text
+        if isinstance(text, str):
+            # Limpiar escapes comunes
+            cleaned = text.replace('\\n', '\n').replace('\\"', '"').replace('\\t', '\t')
+            # Buscar el primer bloque JSON
+            match = re.search(r'\{.*\}', cleaned, re.DOTALL)
+            if match:
+                return json.loads(match.group())
+            # Si no hay match, intentar cargar todo el string
+            return json.loads(cleaned)
+    except Exception as e:
+        logger.error(f"Error al parsear JSON robusto: {e}")
     logger.warning("No se pudo extraer JSON, devolviendo texto completo como resumen.")
     return {"clasificados": [], "resumen": str(text)}
+
 
 def procesar_comentarios(comentarios: List[str], batch_size: int = 10, max_workers: int = 4):
     lotes = [comentarios[i:i+batch_size] for i in range(0, len(comentarios), batch_size)]
