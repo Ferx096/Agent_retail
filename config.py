@@ -1,8 +1,16 @@
 import os
 from dotenv import load_dotenv
 from langchain_openai import AzureChatOpenAI, AzureOpenAIEmbeddings
+from pathlib import Path
 
-load_dotenv()
+# Busca .env en el directorio actual y en el padre (raíz del proyecto)
+current_dir = Path(__file__).parent
+root_dir = current_dir.parent
+
+dotenv_path = current_dir / '.env'
+if not dotenv_path.exists():
+    dotenv_path = root_dir / '.env'
+load_dotenv(dotenv_path)
 
 AZURE_CONFIG = {
     "endpoint": os.getenv("AZURE_OPENAI_ENDPOINT"),
@@ -35,3 +43,4 @@ HUGGING={
     "api_url": os.getenv("HUGGINGFACE_API_URL"),
     "api": os.getenv("API_TOKEN_HUGGINGFACE"),
 }
+
