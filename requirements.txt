@@ -18,3 +18,5 @@ gradio
 huggingface_hub
 datetime
 streamlit
+uvicorn 
+fastapi
