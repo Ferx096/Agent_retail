@@ -4,7 +4,7 @@ import os
 sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + '/../'))
 import requests
 from config import HUGGING
-git addlogging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
 api_token = HUGGING['api']
