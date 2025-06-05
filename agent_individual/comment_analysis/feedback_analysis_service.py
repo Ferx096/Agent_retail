@@ -51,8 +51,14 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
         if isinstance(text, dict):
             return text
         if isinstance(text, str):
+            # Si la respuesta tiene 'content=', extraer solo el contenido
+            content_match = re.search(r"content='(.*?)'", text, re.DOTALL)
+            if content_match:
+                content = content_match.group(1)
+            else:
+                content = text
             # Limpiar escapes comunes
-            cleaned = text.replace('\\n', '\n').replace('\\"', '"').replace('\\t', '\t')
+            cleaned = content.replace('\\n', '\n').replace('\\"', '"').replace('\\t', '\t')
             # Buscar el primer bloque JSON
             match = re.search(r'\{.*\}', cleaned, re.DOTALL)
             if match:
