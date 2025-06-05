@@ -2,7 +2,7 @@ from generator_p_description import app
 from langchain_core.messages import HumanMessage
 
 initial_state = {
-    "query":"DEDE",
+    "query":"",
     "snack_type": "barra",
     "main_ingredients": "organico",
     "nutritional_benefits": "alto en fibra",
