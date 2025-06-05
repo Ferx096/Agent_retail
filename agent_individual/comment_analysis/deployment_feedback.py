@@ -34,10 +34,7 @@ if comentarios:
                 resp = requests.post(url, json={"comentarios": comentarios}, timeout=120)
                 if resp.status_code == 200:
                     data = resp.json()
-                    st.subheader("Clasificación de comentarios")
-                    df_result = pd.DataFrame(data["clasificados"])
-                    st.dataframe(df_result)
-                    st.subheader("Resumen ejecutivo")
+                    st.subheader("Análisis y resumen de comentarios")
                     st.write(data["resumen"])
                     logger.info("Resultados mostrados correctamente en Streamlit.")
                 else:

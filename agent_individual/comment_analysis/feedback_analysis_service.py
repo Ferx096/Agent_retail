@@ -26,58 +26,20 @@ app = FastAPI(title="Microservicio de Análisis de Comentarios de productos")
 class ComentariosRequest(BaseModel):
     comentarios: List[str]
 
-class ComentarioClasificado(BaseModel):
-    comentario: str
-    clasificacion: str
-    justificacion: str
-
 class AnalisisRespuesta(BaseModel):
-    clasificados: List[ComentarioClasificado]
     resumen: str
 
 def analizar_lote(lote: List[str]) -> Dict[str, Any]:
     prompt = (
-        "Eres un analista experto en feedback de clientes. Para cada comentario, clasifícalo como POSITIVO, NEGATIVO o NEUTRO y justifica brevemente la clasificación. "
-        "Después, genera un resumen ejecutivo de los principales temas y problemas detectados en este lote. "
-        "Responde en formato JSON con dos claves: 'clasificados' (lista de objetos con 'comentario', 'clasificacion', 'justificacion') y 'resumen' (string).\n"
+        "Eres un analista experto en feedback de clientes. Analiza los siguientes comentarios, clasifica cada uno como POSITIVO, NEGATIVO o NEUTRO y justifica brevemente cada clasificación. "
+        "Luego, genera un resumen ejecutivo de los principales temas y problemas detectados. "
+        "Responde TODO en texto libre, NO en formato JSON.\n"
         "Comentarios:\n" + "\n".join([f"{i+1}. {c}" for i, c in enumerate(lote)])
     )
     logger.info(f"Enviando lote de {len(lote)} comentarios a Azure OpenAI...")
     text = llm.invoke(prompt)
     logger.info(f"Respuesta recibida de Azure OpenAI para lote: {str(text)[:200]}...")
-
-    # Intentar parsear directamente si es un dict o string JSON
-    try:
-        if isinstance(text, dict):
-            return text
-        if isinstance(text, str):
-            # Si la respuesta tiene 'content=', extraer solo el contenido
-            content_match = re.search(r"content='(.*?)'", text, re.DOTALL)
-            if content_match:
-                content = content_match.group(1)
-            else:
-                content = text
-            # Intentar doble deserialización si es necesario
-            try:
-                # Primer intento: deserializar como string JSON anidado
-                inner = json.loads(content)
-                if isinstance(inner, str):
-                    return json.loads(inner)
-                return inner
-            except Exception:
-                pass
-            # Limpiar escapes comunes
-            cleaned = content.replace('\\n', '\n').replace('\\"', '"').replace('\\t', '\t')
-            # Buscar el primer bloque JSON
-            match = re.search(r'\{.*\}', cleaned, re.DOTALL)
-            if match:
-                return json.loads(match.group())
-            # Si no hay match, intentar cargar todo el string
-            return json.loads(cleaned)
-    except Exception as e:
-        logger.error(f"Error al parsear JSON robusto: {e}")
-    logger.warning("No se pudo extraer JSON, devolviendo texto completo como resumen.")
-    return {"clasificados": [], "resumen": str(text)}
+    return {"resumen": str(text)}
 
 
 def procesar_comentarios(comentarios: List[str], batch_size: int = 10, max_workers: int = 4):
@@ -85,13 +47,8 @@ def procesar_comentarios(comentarios: List[str], batch_size: int = 10, max_worke
     resultados = []
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         resultados = list(executor.map(analizar_lote, lotes))
-    clasificados = []
-    resumenes = []
-    for r in resultados:
-        clasificados.extend(r.get("clasificados", []))
-        resumenes.append(r.get("resumen", ""))
-    logger.info(f"Total de comentarios clasificados: {len(clasificados)}")
-    return {"clasificados": clasificados, "resumen": "\n".join(resumenes)}
+    resumenes = [r.get("resumen", "") for r in resultados]
+    return {"resumen": "\n".join(resumenes)}
 
 @app.post("/analizar", response_model=AnalisisRespuesta)
 def analizar_endpoint(request: ComentariosRequest):
