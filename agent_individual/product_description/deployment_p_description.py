@@ -1,6 +1,5 @@
 import os
 import gradio as gr
-import uuid
 from generator_p_description import app
 
 os.environ["KMP_DUPLICATE_LIB_OK"] = "TRUE"

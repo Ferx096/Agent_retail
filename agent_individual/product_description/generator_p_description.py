@@ -1,7 +1,11 @@
 import logging
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + '/../'))
+from datetime import datetime
+# Agrega la raíz del proyecto al sys.path
+ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+if ROOT_PATH not in sys.path:
+    sys.path.insert(0, ROOT_PATH)
 from langgraph.graph import StateGraph, END
 from langgraph.graph.message import add_messages
 from typing import TypedDict, Annotated

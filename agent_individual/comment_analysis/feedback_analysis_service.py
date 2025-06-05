@@ -1,5 +1,13 @@
+import streamlit as st
+import logging
+import sys
 import os
-import openai
+from datetime import datetime
+# Agrega la raíz del proyecto al sys.path
+ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+if ROOT_PATH not in sys.path:
+    sys.path.insert(0, ROOT_PATH)
+
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from typing import List, Dict, Any
@@ -7,6 +15,9 @@ from concurrent.futures import ThreadPoolExecutor
 import re
 import json
 import logging
+from config import get_llm
+
+llm = get_llm()
 
 # Configuración de logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
@@ -14,7 +25,7 @@ logger = logging.getLogger(__name__)
 
 openai.api_key = os.getenv('OPENAI_API_KEY')
 
-app = FastAPI(title="Microservicio de Análisis de Comentarios con OpenAI GPT-4o")
+app = FastAPI(title="Microservicio de Análisis de Comentarios de productos")
 
 class ComentariosRequest(BaseModel):
     comentarios: List[str]
@@ -36,7 +47,7 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
         "Comentarios:\n" + "\n".join([f"{i+1}. {c}" for i, c in enumerate(lote)])
     )
     logger.info(f"Enviando lote de {len(lote)} comentarios a OpenAI...")
-    response = openai.ChatCompletion.create(
+    response = llm.ChatCompletion.create(
         model="gpt-4o",
         messages=[{"role": "user", "content": prompt}],
         max_tokens=900

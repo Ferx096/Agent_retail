@@ -6,7 +6,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger(__name__)
 
-st.title("Análisis de Comentarios de Usuarios (OpenAI GPT-4o)")
+st.title("Análisis de Comentarios de Usuarios - Feedback")
 st.write("Carga comentarios manualmente o desde un archivo CSV. El análisis se realiza usando el microservicio FastAPI.")
 
 comentarios = []
