@@ -45,7 +45,14 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
     if isinstance(text, str):
         match = re.search(r"content='(.*?)'", text, re.DOTALL)
         if match:
-            return {"resumen": match.group(1)}
+            # Desescapar el string para mostrarlo limpio
+            import codecs
+            resumen_limpio = match.group(1)
+            try:
+                resumen_limpio = resumen_limpio.encode('utf-8').decode('unicode_escape')
+            except Exception:
+                pass
+            return {"resumen": resumen_limpio}
     if hasattr(text, 'content'):
         return {"resumen": str(text.content)}
     if isinstance(text, dict) and 'content' in text:
