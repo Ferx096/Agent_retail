@@ -1,9 +1,13 @@
 import logging
 import sys
 import os
-sys.path.insert(0, os.path.abspath(os.path.dirname(__file__) + '/../'))
+# Agrega la raíz del proyecto al sys.path
+ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
+if ROOT_PATH not in sys.path:
+    sys.path.insert(0, ROOT_PATH)
 import requests
 from config import HUGGING
+
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 
