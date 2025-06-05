@@ -1,4 +1,3 @@
-import streamlit as st
 import logging
 import sys
 import os
@@ -14,7 +13,6 @@ from typing import List, Dict, Any
 from concurrent.futures import ThreadPoolExecutor
 import re
 import json
-import logging
 from config import get_llm
 
 llm = get_llm()
@@ -22,8 +20,6 @@ llm = get_llm()
 # Configuración de logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s %(levelname)s %(message)s')
 logger = logging.getLogger(__name__)
-
-openai.api_key = os.getenv('OPENAI_API_KEY')
 
 app = FastAPI(title="Microservicio de Análisis de Comentarios de productos")
 
@@ -46,22 +42,17 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
         "Responde en formato JSON con dos claves: 'clasificados' (lista de objetos con 'comentario', 'clasificacion', 'justificacion') y 'resumen' (string).\n"
         "Comentarios:\n" + "\n".join([f"{i+1}. {c}" for i, c in enumerate(lote)])
     )
-    logger.info(f"Enviando lote de {len(lote)} comentarios a OpenAI...")
-    response = llm.ChatCompletion.create(
-        model="gpt-4o",
-        messages=[{"role": "user", "content": prompt}],
-        max_tokens=900
-    )
-    text = response.choices[0].message['content']
-    logger.info(f"Respuesta recibida de OpenAI para lote: {text[:200]}...")
-    match = re.search(r'\{.*\}', text, re.DOTALL)
+    logger.info(f"Enviando lote de {len(lote)} comentarios a Azure OpenAI...")
+    text = llm.invoke(prompt)
+    logger.info(f"Respuesta recibida de Azure OpenAI para lote: {str(text)[:200]}...")
+    match = re.search(r'\{.*\}', str(text), re.DOTALL)
     if match:
         try:
             return json.loads(match.group())
         except Exception as e:
             logger.error(f"Error al parsear JSON: {e}")
     logger.warning("No se pudo extraer JSON, devolviendo texto completo como resumen.")
-    return {"clasificados": [], "resumen": text}
+    return {"clasificados": [], "resumen": str(text)}
 
 def procesar_comentarios(comentarios: List[str], batch_size: int = 10, max_workers: int = 4):
     lotes = [comentarios[i:i+batch_size] for i in range(0, len(comentarios), batch_size)]
