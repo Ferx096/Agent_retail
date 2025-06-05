@@ -37,7 +37,8 @@ query = (
     "Con base en el contexto proporcionado:\n"
     "1. Escribe una descripción ideal de producto de Snacks saludables.\n"
     "2. Enumera las condiciones o datos mínimos necesarios para generar una descripción precisa.\n"
-    "3. Muestrame 5 ejemplos de como crees que es una descripcion de producto ideal.\n"
+    "3. Muestra las instrucciones a seguir para generar las descripciones\n"
+    "4. Muestrame 5 ejemplos de como crees que es una descripcion de producto ideal.\n"
     "Responde en formato de lista  y entrega la respuesta final como un prompt reutilizable para otro LLM, encerrado entre triple comilla (''')."
 )
 #Recupera los fragmentos más relevantes usando el retriever
