@@ -48,6 +48,21 @@ Esto ejecutará un ejemplo de generación y mostrará la descripción resultante
 
 
 ---
+## Wrokflow
+
+```mermaid
+flowchart TD;
+    a[Input Collector];
+    b[Validate Input];
+    c[Generate reply];
+    d[End];
+    a --> b;
+    b --> c;
+    c --> d;
+```
+
+
+---
 ## Notas técnicas
 
 - El grafo espera que los datos de entrada usen claves en inglés y con guion bajo (ej: `target_audience`).
