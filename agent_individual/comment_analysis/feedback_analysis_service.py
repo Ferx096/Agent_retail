@@ -40,6 +40,12 @@ def analizar_lote(lote: List[str]) -> Dict[str, Any]:
     text = llm.invoke(prompt)
     logger.info(f"Respuesta recibida de Azure OpenAI para lote: {str(text)[:200]}...")
     # Si la respuesta viene como objeto con content, extraerlo
+    # Si la respuesta es un string que contiene content='...', extraerlo
+    import re
+    if isinstance(text, str):
+        match = re.search(r"content='(.*?)'", text, re.DOTALL)
+        if match:
+            return {"resumen": match.group(1)}
     if hasattr(text, 'content'):
         return {"resumen": str(text.content)}
     if isinstance(text, dict) and 'content' in text:
