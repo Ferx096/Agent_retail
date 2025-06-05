@@ -18,7 +18,7 @@ api_token = HUGGING['api']
 model_id = "stabilityai/stable-diffusion-2"
 
 # 3. URL de inferencia
-API_URL = f"https://api-inference.huggingface.co/models/{model_id}"
+API_URL = f"https://api-inference.huggingface.co/models/stabilityai/stable-diffusion-2"
 
 # 4. Prompt descriptivo
 prompt = "Un empaque de snacks saludables, diseño moderno y minimalista, colores verde y blanco, fondo blanco con luz natural, frutas frescas, estilo fotográfico profesional"

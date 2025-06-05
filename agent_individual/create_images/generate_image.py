@@ -6,34 +6,33 @@ ROOT_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), '../../'))
 if ROOT_PATH not in sys.path:
     sys.path.insert(0, ROOT_PATH)
 import requests
+from huggingface_hub import InferenceClient
 from config import HUGGING
 
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-
+# 1. Tu token personal de Hugging Face
 api_token = HUGGING['api']
-api_url = HUGGING['api_url']
-def generate_image(prompt, filename="imagen_generada.png"):
-    headers = {
-        "Authorization": f"Bearer {api_token}",
-        "Accept": "application/json"
-    }
-    response = requests.post(
-        api_url,
-        headers=headers,
-        json={"inputs": prompt}
-    )
-    if response.status_code == 200:
-        images_dir = "images"
-        os.makedirs(images_dir, exist_ok=True)
-        image_path = os.path.join(images_dir, filename)
-        with open(image_path, "wb") as f:
-            f.write(response.content)
-        print(f"Imagen guardada en {image_path}")
-        return image_path
-    else:
-        print("Error:", response.status_code, response.text)
-        return None
+
+import os
+
+client = InferenceClient(
+    provider="nscale",
+    api_key=api_token,
+)
+
+# output is a PIL.Image object
+image = client.text_to_image(
+    "Astronaut riding a horse",
+    model="black-forest-labs/FLUX.1-dev",
+)
+
+images_dir = "images"
+os.makedirs(images_dir, exist_ok=True)
+# Nombre del archivo (ej: imagen_20250604_1452.png)
+filename = f"imagen_{datetime.now().strftime('%Y%m%d_%H%M%S')}.png"
+image_path = os.path.join(images_dir, filename)
+image.save(image_path)
+print(f"✅ Imagen guardada en: {image_path}")
 
 
 
