@@ -57,7 +57,7 @@ def generate_reply(state: GraphState) -> GraphState:
     logging.info('Validar informacion')
     #Añadir respeusta a los mensajes
     state["messages"].append(AIMessage(content=reply))
-    return reply
+    return state
 
 def node_end(state: GraphState) -> None:
     """ Nodo final, no hace nada o solo marca fin"""
