@@ -48,7 +48,7 @@ Esto ejecutará un ejemplo de generación y mostrará la descripción resultante
 
 
 ---
-## Wrokflow
+## Workflow
 
 ```mermaid
 flowchart TD;
