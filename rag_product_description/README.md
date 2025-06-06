@@ -33,6 +33,11 @@ El objetivo de esta carpeta es obtener información veraz, precisa, real y estru
 
 4. **Personalización y Pruebas**
    - Ajusta los parámetros de fragmentación, prompts y consultas según los resultados obtenidos y las necesidades del proyecto.
+   - Ejevuta `test_p_description.py` y podras hacer pruebas de la obtencion de descripcion de producto
+  
+5. **Despliegue**
+   - Si  deseas ejecutar el despliegue del codigo puedes hacerlo con Gradio (libreria gratuita)
+   - Ejecuta `deployment_p_description.py`
 
 ---
 ## MEJORAS:
