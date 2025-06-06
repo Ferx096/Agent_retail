@@ -54,4 +54,4 @@ Cada agente es autónomo, pero están diseñados para integrarse en flujos multi
 
 ---
 
-**Desarrollado por Ferx096 / Equipo retail_strategy.**
+**Desarrollado por Ferx096 / contacto: fernandocabrerabrz@gmail.com.**
