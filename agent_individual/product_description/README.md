@@ -47,6 +47,17 @@ python test_p_description.py
 Esto ejecutará un ejemplo de generación y mostrará la descripción resultante en consola.
 
 
+#### 4. Despliegue
+
+Puedes probar el despliegue del agente, esto te devolvera una API para poder acceder a la interfaz. Ejecuta:
+
+```bash
+python deployment_p_description.py
+```
+
+https://github.com/user-attachments/assets/c13593a0-e9bf-4f73-93c2-9891ca1c3db1
+
+
 ---
 ## Workflow
 
