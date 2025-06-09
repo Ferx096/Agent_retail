@@ -94,4 +94,4 @@ pip install -r requirements.txt
 ---
 ## Contacto y soporte
 
-Para dudas o mejoras contactame fernandocabrerabrz@gmail.com
+Para dudas o mejoras contactame:  fernandocabrerabrz@gmail.com
