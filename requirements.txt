@@ -11,12 +11,8 @@ langchain-core
 langgraph
 tabulate
 pyppeteer
-openpyxl
 openai
 requests
 gradio
-huggingface_hub
 datetime
 streamlit
-uvicorn 
-fastapi

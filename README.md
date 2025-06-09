@@ -1,57 +1,97 @@
-# retail_strategy: Plataforma Modular de Automatización para Retail
+# **Guía de uso: Agente Generador de Descripción de Producto**
 
-Este proyecto implementa una arquitectura modular para automatizar procesos clave en el sector retail, combinando técnicas de RAG (Retrieval-Augmented Generation) para enriquecer prompts y una colección de agentes inteligentes especializados. El objetivo es optimizar la generación de contenido, el análisis de feedback y la creatividad visual, todo orquestado para adaptarse dinámicamente a las necesidades del negocio.
+Esta carpeta contiene un agente especializado en la generación automática de descripciones de productos para retail, utilizando inteligencia artificial y una interfaz web con Gradio.
 
----
-
-## Objetivo General
-
-Desarrollar una plataforma escalable que permita:
-- Enriquecer y personalizar prompts mediante RAG, integrando información relevante de fuentes internas y externas.
-- Delegar tareas específicas a agentes inteligentes (análisis de comentarios, generación de imágenes, descripciones de producto).
-- Orquestar flujos multiagente para campañas, lanzamientos y análisis de tendencias en retail.
 
 ---
+## Estructura de archivos
 
-## Guía de funcionamiento
+- **deployment_p_description.py**: Define la interfaz web (Gradio) y la función principal que recibe los datos del usuario, prepara el estado de entrada y ejecuta el grafo de generación.
+- **generator_p_description.py**: Contiene la lógica del grafo (LangGraph) y la función de generación de descripciones. Aquí se define el flujo de procesamiento y validación de los datos.
+- **test_p_description.py**: Script de prueba para invocar el agente desde código, útil para testing y debugging.
+- **__init__.py**: Archivo de inicialización del módulo.
 
-### 1. Enriquecimiento de Prompts con RAG
-- El sistema utiliza RAG para buscar información relevante (por ejemplo, tendencias, datos de productos, feedback histórico) y enriquecer los prompts enviados a los modelos generativos.
-- Esto asegura que los agentes trabajen siempre con contexto actualizado y específico del negocio.
-
-### 2. Agentes Especializados
-- **Análisis de Comentarios**: Microservicio FastAPI + Streamlit que analiza grandes volúmenes de feedback de clientes y genera resúmenes ejecutivos en texto plano usando Azure OpenAI.
-- **Generación de Imágenes**: Scripts y app Streamlit para crear imágenes promocionales a partir de descripciones, usando modelos de Hugging Face.
-- **Descripción de Productos**: Agente y app Gradio para generar descripciones de productos personalizadas a partir de atributos clave.
-
-Cada agente es autónomo, pero están diseñados para integrarse en flujos multiagente.
-
-### 3. Orquestación Multiagente (Fase 2)
-- El sistema permitirá que los agentes interactúen entre sí, por ejemplo:
-    - El análisis de comentarios detecta tendencias.
-    - El generador de imágenes crea creatividades alineadas con los insights.
-    - El generador de descripciones adapta el copywriting a los hallazgos.
-- Todo el flujo será trazable y escalable.
 
 ---
+## Instrucciones de uso
 
-## Estructura del repositorio
+#### 1. Ejecutar la interfaz web
 
-- `agent_individual/`: Contiene los agentes individuales y sus submódulos.
-    - `comment_analysis/`: Análisis de comentarios y feedback.
-    - `create_images/`: Generación automática de imágenes.
-    - `product_description/`: Generación de descripciones de producto.
-- (Próximamente) `rag/`: Módulos y utilidades para RAG y enriquecimiento de prompts.
+Desde la raíz del proyecto o desde esta carpeta, ejecuta:
+
+```bash
+python deployment_p_description.py
+```
+
+Esto levantará una interfaz web en Gradio donde podrás ingresar los datos del producto y obtener la descripción generada.
+
+#### 2. Campos requeridos
+
+- **Tipo de snack**: Selecciona el tipo de producto (barra, cereal, galleta, chips).
+- **Ingredientes principales**: Lista de ingredientes destacados.
+- **Beneficios nutricionales**: Características saludables del producto.
+- **Sabores disponibles**: Sabores en los que se ofrece el producto.
+- **Público objetivo**: Puedes seleccionar uno o varios (niños, adultos, deportistas, jóvenes, edad avanzada).
+- **Diferenciador clave**: Qué hace único al producto.
+- **Alergenos y/o certificaciones**: Información relevante sobre alérgenos o certificaciones.
+- **Consulta adicional**: (Opcional) Pregunta o instrucción extra para personalizar la descripción.
+
+#### 3. Pruebas automáticas
+
+Puedes probar el agente sin interfaz ejecutando:
+
+```bash
+python test_p_description.py
+```
+
+Esto ejecutará un ejemplo de generación y mostrará la descripción resultante en consola.
+
+
+#### 4. Despliegue
+
+Puedes probar el despliegue del agente, esto te devolvera una API para poder acceder a la interfaz. Ejecuta:
+
+```bash
+python deployment_p_description.py
+```
+
+https://github.com/user-attachments/assets/c13593a0-e9bf-4f73-93c2-9891ca1c3db1
+
 
 ---
+## Workflow
 
-## Ejemplo de flujo completo
+```mermaid
+flowchart TD;
+    a[Input Collector];
+    b[Validate Input];
+    c[Generate reply];
+    d[End];
+    a --> b;
+    b --> c;
+    c --> d;
+```
 
-1. El usuario o sistema solicita una campaña o análisis.
-2. El módulo RAG busca y agrega contexto relevante al prompt.
-3. Los agentes especializados procesan la solicitud (análisis, imágenes, descripciones).
-4. El resultado se integra y presenta en una interfaz web o se exporta para uso en campañas.
 
 ---
+## Notas técnicas
 
-**Desarrollado por Ferx096 / contacto: fernandocabrerabrz@gmail.com.**
+- El grafo espera que los datos de entrada usen claves en inglés y con guion bajo (ej: `target_audience`).
+- El campo "Público objetivo" puede recibir una lista de valores; la función los convierte a string automáticamente.
+- La respuesta generada se encuentra en el campo `messages` del estado de salida.
+
+
+---
+## Dependencias
+
+Instala las dependencias con:
+
+```bash
+pip install -r requirements.txt
+```
+
+
+---
+## Contacto y soporte
+
+Para dudas o mejoras contactame fernandocabrerabrz@gmail.com

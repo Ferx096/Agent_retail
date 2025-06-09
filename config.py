@@ -38,9 +38,4 @@ def get_embedding():
         api_version=AZURE_CONFIG["api_version"],
     )
 
-#HUGGING-FACE
-HUGGING={
-    "api_url": os.getenv("HUGGINGFACE_API_URL"),
-    "api": os.getenv("API_TOKEN_HUGGINGFACE"),
-}
 
