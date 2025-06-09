@@ -55,6 +55,7 @@ Puedes probar el despliegue del agente, esto te devolvera una API para poder acc
 ```bash
 python deployment_p_description.py
 ```
+[Despliegue completo aqui](https://www.youtube.com/watch?v=KQYl_CPpP1I&t=1s)
 
 https://github.com/user-attachments/assets/c13593a0-e9bf-4f73-93c2-9891ca1c3db1
 
