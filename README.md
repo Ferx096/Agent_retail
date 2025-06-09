@@ -2,6 +2,7 @@
 
 Esta carpeta contiene un agente especializado en la generación automática de descripciones de productos para retail, utilizando inteligencia artificial y una interfaz web con Gradio.
 
+https://github.com/user-attachments/assets/d06a1972-f9e8-472a-9134-7711d6089b8a
 
 ---
 ## Estructura de archivos
